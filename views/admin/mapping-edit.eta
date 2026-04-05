@@ -1,0 +1,41 @@
+<%~ include('../layout', {
+  title: 'Edit Mapping',
+  isAdmin: true,
+  body: `
+<h2>Edit Mapping</h2>
+<p><a href="/admin/mappings">&larr; Back to Mappings</a></p>
+
+<form method="POST" action="/admin/mappings/${it.mapping.id}/edit" class="form-grid">
+  <div class="form-row">
+    <label>Type</label>
+    <input type="text" value="${it.mapping.entity_type}" disabled>
+  </div>
+  <div class="form-row">
+    <label>Entity ID</label>
+    <input type="text" value="${it.mapping.entity_id}" disabled>
+  </div>
+  <div class="form-row">
+    <label>Display Name</label>
+    <input name="entity_name" type="text" value="${it.mapping.entity_name}" required>
+  </div>
+  <div class="form-row">
+    <label>TS3 Server Groups</label>
+    ${it.ts3Groups ? `
+    <select name="ts3_group_ids" multiple size="8" required class="select-groups">
+      ${it.ts3Groups.map(g => {
+        const selected = it.mapping.ts3_group_ids.includes(g.id) ? 'selected' : ''
+        return `<option value="${g.id}" ${selected}>${g.name} (${g.id})</option>`
+      }).join('')}
+    </select>
+    <small>Hold Ctrl / Cmd to select multiple groups</small>
+    ` : `
+    <input name="ts3_group_ids" type="text" value="${it.mapping.ts3_group_ids.join(', ')}" required>
+    <small>TS3 bot is offline &mdash; edit group IDs manually (comma-separated)</small>
+    `}
+  </div>
+  <div class="form-row">
+    <button type="submit" class="btn">Save Changes</button>
+    <a href="/admin/mappings" class="btn btn-link">Cancel</a>
+  </div>
+</form>
+`}) %>

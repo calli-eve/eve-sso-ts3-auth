@@ -1,0 +1,42 @@
+<%~ include('../layout', {
+  title: 'Admin Dashboard',
+  isAdmin: true,
+  body: `
+<h2>Admin Dashboard</h2>
+<div class="admin-nav">
+  <a href="/admin/mappings" class="btn">Manage Mappings</a>
+  <a href="/admin/logs" class="btn">Auth Logs</a>
+  <a href="/admin/admins" class="btn">Admin Characters</a>
+</div>
+
+<h3>Corp/Alliance Mappings (${it.mappings.length})</h3>
+<table>
+  <thead><tr><th>Type</th><th>Name</th><th>Entity ID</th><th>TS3 Group IDs</th></tr></thead>
+  <tbody>
+    ${it.mappings.map(m => `
+    <tr>
+      <td><span class="badge badge-${m.entity_type}">${m.entity_type}</span></td>
+      <td>${m.entity_name}</td>
+      <td class="muted">${m.entity_id}</td>
+      <td><code>${m.ts3_group_ids.join(', ')}</code></td>
+    </tr>`).join('')}
+    ${it.mappings.length === 0 ? '<tr><td colspan="4" class="muted center">No mappings yet.</td></tr>' : ''}
+  </tbody>
+</table>
+
+<h3>Recent Auth Events</h3>
+<table>
+  <thead><tr><th>Time</th><th>Character</th><th>Event</th><th>TS3 Nick</th><th>Detail</th></tr></thead>
+  <tbody>
+    ${it.logs.map(l => `
+    <tr>
+      <td class="muted">${new Date(l.created_at).toLocaleString()}</td>
+      <td>${l.character_name || '-'}</td>
+      <td><span class="badge badge-${l.event_type}">${l.event_type}</span></td>
+      <td>${l.ts3_nickname || '-'}</td>
+      <td class="muted">${l.detail || ''}</td>
+    </tr>`).join('')}
+    ${it.logs.length === 0 ? '<tr><td colspan="5" class="muted center">No events yet.</td></tr>' : ''}
+  </tbody>
+</table>
+`}) %>

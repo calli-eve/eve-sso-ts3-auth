@@ -1,0 +1,73 @@
+<%~ include('../layout', {
+  title: 'Manage Mappings',
+  isAdmin: true,
+  body: `
+<h2>Corp/Alliance &rarr; TS3 Group Mappings</h2>
+<p><a href="/admin">&larr; Dashboard</a></p>
+
+${it.saved ? '<p class="success">Saved successfully.</p>' : ''}
+
+<table>
+  <thead>
+    <tr><th>Type</th><th>Name</th><th>Entity ID</th><th>TS3 Groups</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    ${it.mappings.map(m => {
+      const groupLabels = it.ts3Groups
+        ? m.ts3_group_ids.map(id => {
+            const g = it.ts3Groups.find(g => g.id === id)
+            return g ? `${g.name} <span class="muted">(${id})</span>` : `<span class="muted">${id}</span>`
+          }).join(', ')
+        : `<code>${m.ts3_group_ids.join(', ')}</code>`
+      return `
+    <tr>
+      <td><span class="badge badge-${m.entity_type}">${m.entity_type}</span></td>
+      <td>${m.entity_name}</td>
+      <td class="muted">${m.entity_id}</td>
+      <td>${groupLabels}</td>
+      <td>
+        <a href="/admin/mappings/${m.id}/edit" class="btn btn-sm">Edit</a>
+        <form method="POST" action="/admin/mappings/${m.id}/delete" style="display:inline"
+              onsubmit="return confirm('Delete mapping for ${m.entity_name}?')">
+          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </td>
+    </tr>`}).join('')}
+    ${it.mappings.length === 0 ? '<tr><td colspan="5" class="muted center">No mappings yet.</td></tr>' : ''}
+  </tbody>
+</table>
+
+<h3>Add Mapping</h3>
+<form method="POST" action="/admin/mappings" class="form-grid">
+  <div class="form-row">
+    <label>Type</label>
+    <select name="entity_type" required>
+      <option value="corporation">Corporation</option>
+      <option value="alliance">Alliance</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label>EVE Entity ID</label>
+    <input name="entity_id" type="number" placeholder="e.g. 98000001" required>
+  </div>
+  <div class="form-row">
+    <label>Display Name</label>
+    <input name="entity_name" type="text" placeholder="e.g. Goonswarm Federation" required>
+  </div>
+  <div class="form-row">
+    <label>TS3 Server Groups</label>
+    ${it.ts3Groups ? `
+    <select name="ts3_group_ids" multiple size="8" required class="select-groups">
+      ${it.ts3Groups.map(g => `<option value="${g.id}">${g.name} (${g.id})</option>`).join('')}
+    </select>
+    <small>Hold Ctrl / Cmd to select multiple groups</small>
+    ` : `
+    <input name="ts3_group_ids" type="text" placeholder="e.g. 10, 11, 42" required>
+    <small>TS3 bot is offline &mdash; enter group IDs manually (comma-separated)</small>
+    `}
+  </div>
+  <div class="form-row">
+    <button type="submit" class="btn">Add Mapping</button>
+  </div>
+</form>
+`}) %>

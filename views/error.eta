@@ -1,0 +1,9 @@
+<%~ include('layout', {
+  title: 'Error',
+  body: `
+<div class="card center">
+  <h2>Error</h2>
+  <p class="error">${it.message || 'An unexpected error occurred.'}</p>
+  <a href="/" class="btn">Go Home</a>
+</div>
+`}) %>

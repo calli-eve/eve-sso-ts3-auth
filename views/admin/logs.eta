@@ -1,0 +1,34 @@
+<%~ include('../layout', {
+  title: 'Auth Logs',
+  isAdmin: true,
+  body: `
+<h2>Auth Logs</h2>
+<p><a href="/admin">&larr; Dashboard</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Event</th>
+      <th>Character</th>
+      <th>TS3 Nick</th>
+      <th>TS3 DB ID</th>
+      <th>Groups</th>
+      <th>Detail</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${it.logs.map(l => `
+    <tr>
+      <td class="muted">${new Date(l.created_at).toLocaleString()}</td>
+      <td><span class="badge badge-${l.event_type}">${l.event_type}</span></td>
+      <td>${l.character_name || '-'} ${l.character_id ? '<span class="muted">(' + l.character_id + ')</span>' : ''}</td>
+      <td>${l.ts3_nickname || '-'}</td>
+      <td class="muted">${l.ts3_client_db_id || '-'}</td>
+      <td>${l.groups_assigned ? '<code>' + l.groups_assigned.join(', ') + '</code>' : '-'}</td>
+      <td class="muted">${l.detail || ''}</td>
+    </tr>`).join('')}
+    ${it.logs.length === 0 ? '<tr><td colspan="7" class="muted center">No log entries yet.</td></tr>' : ''}
+  </tbody>
+</table>
+`}) %>

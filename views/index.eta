@@ -1,0 +1,26 @@
+<%~ include('layout', {
+  title: 'TS3 Auth',
+  isAdmin: it.isAdmin,
+  body: `
+<div class="card center">
+  ${!it.user ? `
+    <h1>TeamSpeak 3 Auth</h1>
+    <p>Log in with your EVE Online account. If your corporation or alliance is registered, you will receive a token to authenticate on TeamSpeak.</p>
+    ${it.error ? `<p class="error">Login failed. Please try again.</p>` : ''}
+    <a href="/auth/eve" class="btn-eve">Login with EVE SSO</a>
+  ` : it.noMapping ? `
+    <h2>No Access</h2>
+    <p>Your corporation or alliance is not registered for TeamSpeak access.</p>
+    <p>Contact an alliance administrator to be added.</p>
+    <p class="muted">Logged in as <strong>${it.user.character_name}</strong></p>
+  ` : `
+    <h2>Your Auth Token</h2>
+    <p>In TeamSpeak, type this in any channel:</p>
+    <div class="token-box">
+      <code>!auth ${it.token}</code>
+    </div>
+    <p class="muted">This token expires at <strong>${new Date(it.expiresAt).toUTCString()}</strong> and can only be used once.</p>
+    <p class="muted">Logged in as <strong>${it.user.character_name}</strong></p>
+  `}
+</div>
+`}) %>

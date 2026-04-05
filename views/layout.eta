@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= it.title || 'TS3 Auth' %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">TS3 Auth</a>
+      <nav>
+        <% if (it.currentUser) { %>
+          <span class="nav-char"><%= it.currentUser.character_name %></span>
+          <% if (it.isAdmin || it.currentUser._isAdmin) { %>
+            <a href="/admin">Admin</a>
+          <% } %>
+          <form method="POST" action="/auth/logout" style="display:inline">
+            <button type="submit" class="btn-link">Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/auth/eve">Login</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <%~ it.body %>
+  </main>
+  <footer>
+    <p>EVE Online SSO &rarr; TeamSpeak 3 Auth</p>
+  </footer>
+</body>
+</html>

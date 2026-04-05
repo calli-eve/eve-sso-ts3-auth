@@ -1,0 +1,42 @@
+<%~ include('../layout', {
+  title: 'Admin Characters',
+  isAdmin: true,
+  body: `
+<h2>Admin Characters</h2>
+<p><a href="/admin">&larr; Dashboard</a></p>
+<p class="muted">Characters listed in the <code>ADMIN_CHARACTER_IDS</code> env var are always admins and do not appear here.</p>
+
+<table>
+  <thead><tr><th>Character ID</th><th>Name</th><th>Added</th><th>Actions</th></tr></thead>
+  <tbody>
+    ${it.admins.map(a => `
+    <tr>
+      <td class="muted">${a.character_id}</td>
+      <td>${a.character_name}</td>
+      <td class="muted">${new Date(a.added_at).toLocaleDateString()}</td>
+      <td>
+        <form method="POST" action="/admin/admins/${a.character_id}/delete" style="display:inline"
+              onsubmit="return confirm('Remove admin access for ${a.character_name}?')">
+          <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+        </form>
+      </td>
+    </tr>`).join('')}
+    ${it.admins.length === 0 ? '<tr><td colspan="4" class="muted center">No DB-managed admins.</td></tr>' : ''}
+  </tbody>
+</table>
+
+<h3>Add Admin</h3>
+<form method="POST" action="/admin/admins" class="form-grid">
+  <div class="form-row">
+    <label>Character ID</label>
+    <input name="character_id" type="number" placeholder="EVE character ID" required>
+  </div>
+  <div class="form-row">
+    <label>Character Name</label>
+    <input name="character_name" type="text" placeholder="Display name" required>
+  </div>
+  <div class="form-row">
+    <button type="submit" class="btn">Add Admin</button>
+  </div>
+</form>
+`}) %>
