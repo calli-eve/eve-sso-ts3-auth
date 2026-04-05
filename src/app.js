@@ -19,6 +19,7 @@ const eta = new Eta({
   cache: process.env.NODE_ENV === 'production',
 })
 
+app.set('trust proxy', 1)
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../public')))
@@ -30,7 +31,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.COOKIE_SECURE === 'true',
     httpOnly: true,
     sameSite: 'lax',
   },

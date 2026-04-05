@@ -23,6 +23,7 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       NODE_ENV:            production
+      COOKIE_SECURE:       ${COOKIE_SECURE:-false}
       PORT:                3000
       SESSION_SECRET:      ${SESSION_SECRET}
       PGHOST:              db
